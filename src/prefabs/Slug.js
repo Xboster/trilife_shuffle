@@ -8,11 +8,11 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
 
         this.direction = direction;
-        this.velocity = 20;
+        this.velocity = 30;
 
         // initialize state machine managing Slug (initial state, possible states, state args[])
         scene.slugFSM = new StateMachine(
-            "move",
+            "idle",
             {
                 idle: new IdleState(),
                 move: new MoveState(),
@@ -24,29 +24,45 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
 
 class IdleState extends State {
     enter(scene, slug) {
-        d;
         slug.setVelocity(0);
         slug.setAlpha(1);
 
         // slug.anims.stop();
     }
-    execute(scene, slug) {}
+    execute(scene, slug) {
+        const { space } = scene.keys;
+        if (Phaser.Input.Keyboard.JustDown(space)) {
+            this.stateMachine.transition("move");
+            slug.direction *= -1;
+            console.log("PRESSED SPACE");
+            return;
+        }
+    }
 }
 
 class MoveState extends State {
-    enter(scene, slug) {}
-    execute(scene, slug) {
+    enter(scene, slug) {
         slug.setAlpha(1);
         let moveDirection = new Phaser.Math.Vector2(0, 0);
         // x, y speed
 
-        moveDirection.x = 1;
+        moveDirection.x = slug.direction;
 
         moveDirection.normalize();
         slug.setVelocity(
             slug.velocity * moveDirection.x,
             slug.velocity * moveDirection.y
         );
-        // slug.anims.play(`walk-${slug.direction}`, true);
+        slug.anims.play(`move`, true);
+    }
+    execute(scene, slug) {
+        const { space } = scene.keys;
+        if (Phaser.Input.Keyboard.JustDown(space)) {
+            this.stateMachine.transition("move");
+            slug.direction *= -1;
+            slug.setFlipX(!slug.flipX);
+            console.log("PRESSED SPACE");
+            return;
+        }
     }
 }

@@ -1,6 +1,6 @@
 class Menu extends Phaser.Scene {
     constructor() {
-        super("menuScene");
+        super("LoadScene");
     }
     init() {}
     preload() {
@@ -11,6 +11,7 @@ class Menu extends Phaser.Scene {
         });
     }
     create() {
+        // start text
         let menuConfig = {
             fontFamily: "Courier",
             fontSize: "8px",
@@ -43,10 +44,21 @@ class Menu extends Phaser.Scene {
                 menuConfig
             )
             .setOrigin(0.5);
+        // animations
+        this.anims.create({
+            key: "move",
+            frameRate: 24,
+            repeat: -1,
+            frames: this.anims.generateFrameNumbers("slug", {
+                start: 0,
+                end: 2,
+            }),
+        });
+
         this.input.keyboard.on("keydown", () => {
             this.scene.start("playScene");
             console.log("PLAY SCENE");
         });
-    }
+    } 
     update() {}
 }

@@ -17,7 +17,7 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0,
         };
-
+        this.keys = this.input.keyboard.createCursorKeys();
         // debug key listener (assigned to D key)
         this.input.keyboard.on(
             "keydown-D",
@@ -60,11 +60,11 @@ class Play extends Phaser.Scene {
         graphics.fillRect(44, 0, 1, 100);
         graphics.fillRect(42, 0, 1, 100);
 
-        // add new Slug to scene (scene, x, y, key, frame, direction)
-        this.slug = new Slug(this, 50, 40, "slug", 0, 1);
+        // add new Slug to scene (scene, x, y, texture, direction)
+        this.slug = new Slug(this, 50, 40, "slug", 1);
     }
     update() {
-        // make sure we step (ie update) the hero's state machine
+        // make sure we step (ie update) the slug's state machine
         this.slugFSM.step();
     }
 }
