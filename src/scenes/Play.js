@@ -62,6 +62,15 @@ class Play extends Phaser.Scene {
         this.bus1 = new Bus(this, 65, 50, "bus", 2);
         this.bus2 = new Bus(this, 65, 70, "bus", 2);
         this.bus3 = new Bus(this, 65, 90, "bus", 2);
+
+        this.busses = this.add.group([this.bus1, this.bus2, this.bus3]);
+
+        // this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
+        //     slug.body.enable = false;
+        //     bus.hasPlayer = true;
+        //     bus.setTintFill(0xffbf00);
+        //     console.log("SLUG");
+        // });
     }
     update() {
         // make sure we step (ie update) the slug's state machine

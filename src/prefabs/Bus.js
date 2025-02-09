@@ -2,12 +2,10 @@ class Bus extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, direction) {
         super(scene, x, y, texture, direction);
         scene.add.existing(this);
-
         scene.physics.add.existing(this);
-
         this.body.setSize(4, 7);
         // this.body.setCollideWorldBounds(true);
-
+        this.hasPlayer = false;
         this.direction = -direction;
         this.velocity = 60;
 

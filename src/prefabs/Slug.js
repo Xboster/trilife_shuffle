@@ -25,58 +25,41 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
 class OnBus extends State {
     enter(scene, slug) {
         slug.setVelocity(0);
-        slug.setAlpha(1);
-
-        // slug.anims.stop();
+        slug.setAlpha(0);
+        slug.anims.stop();
     }
-    execute(scene, slug) {
-        const { space } = scene.keys;
-        if (Phaser.Input.Keyboard.JustDown(space)) {
-            slug.direction *= -1;
-            console.log("PRESSED SPACE");
-            this.stateMachine.transition("move");
-            return;
-        }
-    }
+    execute(scene, slug) {}
 }
 
 class MoveState extends State {
     enter(scene, slug) {
         slug.setAlpha(1);
         slug.anims.play(`move`, true);
-        let moveDirection = new Phaser.Math.Vector2(0, 0);
-        // x, y speed
-        moveDirection.x = slug.direction;
-        moveDirection.normalize();
-        slug.setVelocity(
-            slug.velocity * moveDirection.x,
-            slug.velocity * moveDirection.y
-        );
+
         // swap direction on any keyboard press
         scene.input.keyboard.on("keydown", () => {
             slug.direction *= -1;
-            slug.setFlipX(!slug.flipX);
-            console.log("PRESSED Key");
-            moveDirection.x = slug.direction;
-            slug.setVelocity(
-                slug.velocity * moveDirection.x,
-                slug.velocity * moveDirection.y
-            );
-            // this.stateMachine.transition("move");
-            // return;
         });
 
         // swap direction on any mouse key press
         scene.input.on("pointerdown", () => {
             slug.direction *= -1;
-            slug.setFlipX(!slug.flipX);
-            console.log("PRESSED Key");
-            moveDirection.x = slug.direction;
-            slug.setVelocity(
-                slug.velocity * moveDirection.x,
-                slug.velocity * moveDirection.y
-            );
         });
     }
-    execute(scene, slug) {}
+    execute(scene, slug) {
+        slug.setFlipX(slug.direction == -1 ? true : false);
+        slug.setVelocity(
+            slug.velocity * slug.direction,
+            slug.velocity * 0 // always 0
+        );
+        // bus overlap
+        scene.physics.add.overlap(scene.busses, slug, (bus, slug) => {
+            slug.body.enable = false;
+            bus.hasPlayer = true;
+            bus.setTintFill(0xffbf00);
+            console.log("GOT ON BUS");
+            this.stateMachine.transition("idle");
+            return;
+        });
+    }
 }
