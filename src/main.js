@@ -10,6 +10,7 @@
 // const game = new Phaser.Game(config);
 const config = {
     type: Phaser.AUTO,
+    pixelArt: true,
     // game size
     scale: {
         mode: Phaser.Scale.FIT,
@@ -22,6 +23,7 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
+            debug: true,
             //    x: 0,
             //    y: 0,
             //    width: scene.sys.scale.width,

@@ -18,16 +18,28 @@ class Play extends Phaser.Scene {
             fixedWidth: 0,
         };
 
-        menuConfig.backgroundColor = "#00FF00";
-        menuConfig.color = "#000";
-        this.add
-            .text(
-                game.config.width / 2,
-                game.config.height / 2,
-                "Play Scene",
-                menuConfig
-            )
-            .setOrigin(0.5);
+        // debug key listener (assigned to D key)
+        this.input.keyboard.on(
+            "keydown-D",
+            function () {
+                this.physics.world.drawDebug = this.physics.world.drawDebug
+                    ? false
+                    : true;
+                this.physics.world.debugGraphic.clear();
+            },
+            this
+        );
+
+        // menuConfig.backgroundColor = "#00FF00";
+        // menuConfig.color = "#000";
+        // this.add
+        //     .text(
+        //         game.config.width / 2,
+        //         game.config.height / 2,
+        //         "Play Scene",
+        //         menuConfig
+        //     )
+        //     .setOrigin(0.5);
 
         var graphics = this.add.graphics();
 
@@ -42,10 +54,17 @@ class Play extends Phaser.Scene {
                 alpha: 1,
             },
         });
+        // road lines
         graphics.fillRect(56, 0, 1, 100);
         graphics.fillRect(58, 0, 1, 100);
         graphics.fillRect(44, 0, 1, 100);
         graphics.fillRect(42, 0, 1, 100);
+
+        // add new Slug to scene (scene, x, y, key, frame, direction)
+        this.slug = new Slug(this, 50, 40, "slug", 0, 1);
     }
-    update() {}
+    update() {
+        // make sure we step (ie update) the hero's state machine
+        this.slugFSM.step();
+    }
 }

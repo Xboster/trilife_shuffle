@@ -3,7 +3,13 @@ class Menu extends Phaser.Scene {
         super("menuScene");
     }
     init() {}
-    preload() {}
+    preload() {
+        this.load.path = "./assets/";
+        this.load.spritesheet("slug", "slug.png", {
+            frameWidth: 8,
+            frameHeight: 8,
+        });
+    }
     create() {
         let menuConfig = {
             fontFamily: "Courier",
@@ -37,11 +43,10 @@ class Menu extends Phaser.Scene {
                 menuConfig
             )
             .setOrigin(0.5);
-    }
-    update() {
         this.input.keyboard.on("keydown", () => {
             this.scene.start("playScene");
             console.log("PLAY SCENE");
         });
     }
+    update() {}
 }
