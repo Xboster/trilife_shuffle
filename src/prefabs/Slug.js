@@ -8,13 +8,13 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
 
         this.direction = direction;
-        this.velocity = 30;
+        this.velocity = 40;
 
         // initialize state machine managing Slug (initial state, possible states, state args[])
         scene.slugFSM = new StateMachine(
-            "idle",
+            "move",
             {
-                idle: new IdleState(),
+                idle: new OnBus(),
                 move: new MoveState(),
             },
             [scene, this]
@@ -22,7 +22,7 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
     }
 }
 
-class IdleState extends State {
+class OnBus extends State {
     enter(scene, slug) {
         slug.setVelocity(0);
         slug.setAlpha(1);
@@ -32,9 +32,9 @@ class IdleState extends State {
     execute(scene, slug) {
         const { space } = scene.keys;
         if (Phaser.Input.Keyboard.JustDown(space)) {
-            this.stateMachine.transition("move");
             slug.direction *= -1;
             console.log("PRESSED SPACE");
+            this.stateMachine.transition("move");
             return;
         }
     }
@@ -58,10 +58,10 @@ class MoveState extends State {
     execute(scene, slug) {
         const { space } = scene.keys;
         if (Phaser.Input.Keyboard.JustDown(space)) {
-            this.stateMachine.transition("move");
             slug.direction *= -1;
             slug.setFlipX(!slug.flipX);
-            console.log("PRESSED SPACE");
+            // console.log("PRESSED SPACE");
+            this.stateMachine.transition("move");
             return;
         }
     }

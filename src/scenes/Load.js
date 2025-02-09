@@ -9,6 +9,10 @@ class Menu extends Phaser.Scene {
             frameWidth: 8,
             frameHeight: 8,
         });
+        this.load.spritesheet("bus", "bus.png", {
+            frameWidth: 8,
+            frameHeight: 8,
+        });
     }
     create() {
         // start text
@@ -59,6 +63,6 @@ class Menu extends Phaser.Scene {
             this.scene.start("playScene");
             console.log("PLAY SCENE");
         });
-    } 
+    }
     update() {}
 }
