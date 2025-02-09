@@ -1,13 +1,62 @@
 // Leon Ng
 // Trilife Shuffle
-let config = {
-    type: Phaser.AUTO,
-    width: 480,
-    height: 480,
-    scene: [Menu, Play],
-};
+// const config = {
+//     type: Phaser.AUTO,
+//     width: 480,
+//     height: 480,
+//     scene: [Menu, Play],
+// };
 
-let game = new Phaser.Game(config);
-// set UI sizes
-let borderUISize = game.config.height / 15;
-let borderPadding = borderUISize / 3;
+// const game = new Phaser.Game(config);
+const config = {
+    type: Phaser.AUTO,
+    // game size
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        zoom: 4,
+        width: 100,
+        height: 100,
+    },
+
+    physics: {
+        default: "arcade",
+        arcade: {
+            //    x: 0,
+            //    y: 0,
+            //    width: scene.sys.scale.width,
+            //    height: scene.sys.scale.height,
+            //    gravity: {
+            //        x: 0,
+            //        y: 0
+            //    },
+            //    checkCollision: {
+            //        up: true,
+            //        down: true,
+            //        left: true,
+            //        right: true
+            //    },
+            //    customUpdate: false,
+            //    fixedStep: true,
+            //    fps: 60,
+            //    timeScale: 1,     // 2.0 = half speed, 0.5 = double speed
+            //    customUpdate: false,
+            //    overlapBias: 4,
+            //    tileBias: 16,
+            //    forceX: false,
+            //    isPaused: false,
+            //    debug: false,
+            //    debugShowBody: true,
+            //    debugShowStaticBody: true,
+            //    debugShowVelocity: true,
+            //    debugBodyColor: 0xff00ff,
+            //    debugStaticBodyColor: 0x0000ff,
+            //    debugVelocityColor: 0x00ff00,
+            //    maxEntries: 16,
+            //    useTree: true   // set false if amount of dynamic bodies > 5000
+        },
+    },
+    scene: [Menu, Play],
+    // ...
+};
+const game = new Phaser.Game(config);

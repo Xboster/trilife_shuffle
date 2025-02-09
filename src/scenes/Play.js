@@ -7,7 +7,7 @@ class Play extends Phaser.Scene {
     create() {
         let menuConfig = {
             fontFamily: "Courier",
-            fontSize: "28px",
+            fontSize: "8px",
             backgroundColor: "#F3B141",
             color: "#843605",
             align: "right",
@@ -23,11 +23,29 @@ class Play extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                game.config.height / 2 - borderUISize - borderPadding,
+                game.config.height / 2,
                 "Play Scene",
                 menuConfig
             )
             .setOrigin(0.5);
+
+        var graphics = this.add.graphics();
+
+        graphics.setDefaultStyles({
+            lineStyle: {
+                width: 1,
+                color: 0x003c6c,
+                alpha: 1,
+            },
+            fillStyle: {
+                color: 0x003c6c,
+                alpha: 1,
+            },
+        });
+        graphics.fillRect(56, 0, 1, 100);
+        graphics.fillRect(58, 0, 1, 100);
+        graphics.fillRect(44, 0, 1, 100);
+        graphics.fillRect(42, 0, 1, 100);
     }
     update() {}
 }

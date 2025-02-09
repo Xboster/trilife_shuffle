@@ -7,7 +7,7 @@ class Menu extends Phaser.Scene {
     create() {
         let menuConfig = {
             fontFamily: "Courier",
-            fontSize: "28px",
+            fontSize: "8px",
             backgroundColor: "#F3B141",
             color: "#843605",
             align: "right",
@@ -23,7 +23,7 @@ class Menu extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                game.config.height / 2 - borderUISize - borderPadding,
+                game.config.height / 2,
                 "Trilife Shuffle",
                 menuConfig
             )
@@ -32,7 +32,7 @@ class Menu extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                (game.config.height / 4) * 3 - borderUISize - borderPadding,
+                (game.config.height / 4) * 3,
                 "Press any key to start",
                 menuConfig
             )
