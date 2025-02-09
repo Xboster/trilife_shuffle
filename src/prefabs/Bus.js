@@ -12,7 +12,7 @@ class Bus extends Phaser.Physics.Arcade.Sprite {
         this.velocity = 60;
 
         // initialize state machine managing bus (initial state, possible states, state args[])
-        scene.busFSM = new StateMachine(
+        this.busFSM = new StateMachine(
             "move",
             {
                 idle: new ParkState(),

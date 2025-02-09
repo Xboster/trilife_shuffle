@@ -11,7 +11,7 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
         this.velocity = 40;
 
         // initialize state machine managing Slug (initial state, possible states, state args[])
-        scene.slugFSM = new StateMachine(
+        this.slugFSM = new StateMachine(
             "move",
             {
                 idle: new OnBus(),

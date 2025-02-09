@@ -66,12 +66,16 @@ class Play extends Phaser.Scene {
         // add new Slug to scene (scene, x, y, key, direction)
         this.slug = new Slug(this, 50, 40, "slug", 1);
 
-        // add new Slug to scene (scene, x, y, key, direction)
-        this.bus = new Bus(this, 65, 50, "bus", 2);
+        // add new Bus to scene (scene, x, y, key, direction)
+        this.bus1 = new Bus(this, 65, 50, "bus", 2);
+        this.bus2 = new Bus(this, 65, 70, "bus", 2);
+        this.bus3 = new Bus(this, 65, 90, "bus", 2);
     }
     update() {
         // make sure we step (ie update) the slug's state machine
-        this.slugFSM.step();
-        this.busFSM.step();
+        this.slug.slugFSM.step();
+        this.bus1.busFSM.step();
+        this.bus2.busFSM.step();
+        this.bus3.busFSM.step();
     }
 }
