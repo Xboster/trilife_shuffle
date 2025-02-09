@@ -18,9 +18,12 @@ class Play extends Phaser.Scene {
             fixedWidth: 0,
         };
         this.keys = this.input.keyboard.createCursorKeys();
-        this.keys.BKey = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.B
-        );
+        // this.keys.BKey = this.input.keyboard.addKey(
+        //     Phaser.Input.Keyboard.KeyCodes.B
+        // );
+        this.input.on("pointerdown", (pointer) => {
+            console.log("Mouse clicked at position: ", pointer.x, pointer.y);
+        });
         // debug key listener (assigned to D key)
         this.input.keyboard.on(
             "keydown-D",
@@ -32,17 +35,6 @@ class Play extends Phaser.Scene {
             },
             this
         );
-
-        // menuConfig.backgroundColor = "#00FF00";
-        // menuConfig.color = "#000";
-        // this.add
-        //     .text(
-        //         game.config.width / 2,
-        //         game.config.height / 2,
-        //         "Play Scene",
-        //         menuConfig
-        //     )
-        //     .setOrigin(0.5);
 
         var graphics = this.add.graphics();
 

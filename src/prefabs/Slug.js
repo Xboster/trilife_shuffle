@@ -43,26 +43,40 @@ class OnBus extends State {
 class MoveState extends State {
     enter(scene, slug) {
         slug.setAlpha(1);
+        slug.anims.play(`move`, true);
         let moveDirection = new Phaser.Math.Vector2(0, 0);
         // x, y speed
-
         moveDirection.x = slug.direction;
-
         moveDirection.normalize();
         slug.setVelocity(
             slug.velocity * moveDirection.x,
             slug.velocity * moveDirection.y
         );
-        slug.anims.play(`move`, true);
-    }
-    execute(scene, slug) {
-        const { space } = scene.keys;
-        if (Phaser.Input.Keyboard.JustDown(space)) {
+        // swap direction on any keyboard press
+        scene.input.keyboard.on("keydown", () => {
             slug.direction *= -1;
             slug.setFlipX(!slug.flipX);
-            // console.log("PRESSED SPACE");
-            this.stateMachine.transition("move");
-            return;
-        }
+            console.log("PRESSED Key");
+            moveDirection.x = slug.direction;
+            slug.setVelocity(
+                slug.velocity * moveDirection.x,
+                slug.velocity * moveDirection.y
+            );
+            // this.stateMachine.transition("move");
+            // return;
+        });
+
+        // swap direction on any mouse key press
+        scene.input.on("pointerdown", () => {
+            slug.direction *= -1;
+            slug.setFlipX(!slug.flipX);
+            console.log("PRESSED Key");
+            moveDirection.x = slug.direction;
+            slug.setVelocity(
+                slug.velocity * moveDirection.x,
+                slug.velocity * moveDirection.y
+            );
+        });
     }
+    execute(scene, slug) {}
 }
