@@ -9,6 +9,7 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
 
         this.direction = direction;
         this.velocity = 40;
+        this.onBus = null;
 
         // initialize state machine managing Slug (initial state, possible states, state args[])
         this.slugFSM = new StateMachine(
@@ -29,18 +30,18 @@ class OnBus extends State {
         slug.body.enable = false;
     }
     execute(scene, slug) {
-        let playerBus = scene.busses
+        this.onBus = scene.busses
             .getChildren()
             .find((bus) => bus.hasPlayer == true);
-        slug.direction = playerBus.direction > 0 ? 1 : -1;
-        slug.x = playerBus.x + 5 * slug.direction;
-        slug.y = playerBus.y;
+        slug.direction = this.onBus.direction > 0 ? 1 : -1;
+        slug.x = this.onBus.x + 5 * slug.direction;
+        slug.y = this.onBus.y;
         slug.setFlipX(slug.direction == -1 ? true : false);
 
         // on any key get off bus
         scene.input.keyboard.keys.forEach((key) => {
             if (Phaser.Input.Keyboard.JustDown(key)) {
-                console.log("GOT OFF BUS");
+                console.log("Pressed key to exit bus");
                 this.stateMachine.transition("move");
                 return;
             }
@@ -64,6 +65,12 @@ class MoveState extends State {
             console.log("GOT OFF BUS");
             slug.body.enable = true;
         }
+
+        scene.eventEmitter.once("busBoarded", (bus) => {
+            console.log(slug.x + ", " + slug.y + ": ", slug.direction);
+            this.stateMachine.transition("idle");
+            return;
+        });
     }
     execute(scene, slug) {
         // on any key flip slug
@@ -91,14 +98,6 @@ class MoveState extends State {
             slug.velocity * slug.direction,
             slug.velocity * 0 // always 0
         );
-        console.log(slug.x + ", " + slug.y + ": ", slug.direction);
-        // bus overlap
-        scene.physics.add.overlap(scene.busses, slug, (bus, slug) => {
-            bus.hasPlayer = true;
-            bus.setTintFill(0xffbf00);
-            console.log("GOT ON BUS");
-            this.stateMachine.transition("idle");
-            return;
-        });
+        // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
     }
 }

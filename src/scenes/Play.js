@@ -1,6 +1,8 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+
+        this.eventEmitter = new Phaser.Events.EventEmitter();
     }
     init() {}
     preload() {}
@@ -61,18 +63,25 @@ class Play extends Phaser.Scene {
         this.slug = new Slug(this, 50, 40, "slug", 1);
 
         // add new Bus to scene (scene, x, y, key, direction)
-        this.bus1 = new Bus(this, 65, 50, "bus", 2);
-        this.bus2 = new Bus(this, 65, 70, "bus", 2);
-        this.bus3 = new Bus(this, 65, 90, "bus", 2);
+        this.bus1 = new Bus(this, 65, 50, "bus", 1);
+        this.bus2 = new Bus(this, 65, 70, "bus", 1);
+        this.bus3 = new Bus(this, 65, 90, "bus", 1);
 
         this.busses = this.add.group([this.bus1, this.bus2, this.bus3]);
-
     }
-    update() {
+    update(time, delta) {
         // make sure we step (ie update) the slug's state machine
         this.slug.slugFSM.step();
         this.bus1.busFSM.step();
         this.bus2.busFSM.step();
         this.bus3.busFSM.step();
+
+        this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
+            bus.hasPlayer = true;
+            bus.setTintFill(0xffbf00);
+            this.eventEmitter.emit("busBoarded", bus);
+            // console.log("GOT ON BUS");
+            return;
+        });
     }
 }

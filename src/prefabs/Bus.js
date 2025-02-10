@@ -5,9 +5,10 @@ class Bus extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
         this.body.setSize(4, 7);
         // this.body.setCollideWorldBounds(true);
-        this.hasPlayer = false;
+        this.hasPlayer = null;
         this.direction = -direction;
-        this.velocity = 60;
+        this.velocity = 50;
+        this.wait = 0;
 
         // initialize state machine managing bus (initial state, possible states, state args[])
         this.busFSM = new StateMachine(
@@ -26,8 +27,18 @@ class ParkState extends State {
         bus.setVelocity(0);
         bus.setAlpha(1);
         // bus.anims.stop();
+        // scene.time.delayedCall(400, () => {
+        //     this.stateMachine.transition("move");
+        // });
     }
-    execute(scene, bus) {}
+    execute(scene, bus) {
+        // console.log(bus.wait);
+        bus.wait -= scene.sys.game.loop.delta;
+        if (bus.wait <= 0) {
+            this.stateMachine.transition("move");
+            return;
+        }
+    }
 }
 
 class DriveState extends State {
@@ -44,10 +55,25 @@ class DriveState extends State {
             bus.velocity * moveDirection.y
         );
         // console.log("ENTERED DRIVE STATE");
+        scene.eventEmitter.once("busBoarded", (bus) => {
+            // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
+            // console.log(bus.x + ", " + bus.y + ": ", bus.direction);
+
+            // if (bus.hasPlayer) {
+            //     this.stateMachine.transition("idle");
+            //     return;
+            // }
+            bus.wait = 250;
+        });
     }
     execute(scene, bus) {
-        // Wrap bus around world
+        // make bus wait
+        if (bus.wait > 0) {
+            this.stateMachine.transition("idle");
+            return;
+        }
 
+        // Wrap bus around world
         if (bus.y < -8 && bus.x == 65) {
             // console.log(bus.x + ", " + bus.y);
             bus.x = 35;
@@ -64,5 +90,25 @@ class DriveState extends State {
             this.stateMachine.transition("move");
             return;
         }
+
+        // function movebus(bus) {
+        scene.busses.getChildren().forEach((otherBus) => {
+            if (otherBus.wait > 0 && bus != otherBus && bus.x == otherBus.x) {
+                if (
+                    bus.direction == -1 &&
+                    bus.y > otherBus.y &&
+                    bus.y < otherBus.y + 20
+                ) {
+                    bus.wait = 150;
+                }
+                if (
+                    bus.direction == 1 &&
+                    bus.y > otherBus.y - 20 &&
+                    bus.y < otherBus.y
+                ) {
+                    bus.wait = 150;
+                }
+            }
+        });
     }
 }
