@@ -43,7 +43,7 @@ class DriveState extends State {
             bus.velocity * moveDirection.x,
             bus.velocity * moveDirection.y
         );
-        console.log("ENTERED DRIVE STATE");
+        // console.log("ENTERED DRIVE STATE");
     }
     execute(scene, bus) {
         // Wrap bus around world

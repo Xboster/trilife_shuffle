@@ -24,11 +24,28 @@ class Slug extends Phaser.Physics.Arcade.Sprite {
 
 class OnBus extends State {
     enter(scene, slug) {
-        slug.setVelocity(0);
+        slug.direction = 0;
         slug.setAlpha(0);
-        slug.anims.stop();
+        slug.body.enable = false;
     }
-    execute(scene, slug) {}
+    execute(scene, slug) {
+        let playerBus = scene.busses
+            .getChildren()
+            .find((bus) => bus.hasPlayer == true);
+        slug.direction = playerBus.direction > 0 ? 1 : -1;
+        slug.x = playerBus.x + 5 * slug.direction;
+        slug.y = playerBus.y;
+        slug.setFlipX(slug.direction == -1 ? true : false);
+
+        // on any key get off bus
+        scene.input.keyboard.keys.forEach((key) => {
+            if (Phaser.Input.Keyboard.JustDown(key)) {
+                console.log("GOT OFF BUS");
+                this.stateMachine.transition("move");
+                return;
+            }
+        });
+    }
 }
 
 class MoveState extends State {
@@ -36,25 +53,47 @@ class MoveState extends State {
         slug.setAlpha(1);
         slug.anims.play(`move`, true);
 
-        // swap direction on any keyboard press
-        scene.input.keyboard.on("keydown", () => {
-            slug.direction *= -1;
-        });
+        // getting off bus
+        if (slug.body.enable == false) {
+            let playerBus = scene.busses
+                .getChildren()
+                .find((bus) => bus.hasPlayer == true);
+            playerBus.hasPlayer = false;
+            playerBus.setTintFill(0xffffff);
 
-        // swap direction on any mouse key press
-        scene.input.on("pointerdown", () => {
-            slug.direction *= -1;
-        });
+            console.log("GOT OFF BUS");
+            slug.body.enable = true;
+        }
     }
     execute(scene, slug) {
+        // on any key flip slug
+        Object.values(scene.input.keyboard.keys).forEach((key) => {
+            if (Phaser.Input.Keyboard.JustDown(key)) {
+                slug.direction *= -1;
+                console.log(`Key pressed: ${key.name}`);
+            }
+        });
+
         slug.setFlipX(slug.direction == -1 ? true : false);
+
+        if (slug.direction == -1 && slug.x > 39) {
+            slug.velocity = 40;
+        } else if (slug.direction == -1 && slug.x <= 39) {
+            slug.velocity = 0;
+        }
+        if (slug.direction == 1 && slug.x < 61) {
+            slug.velocity = 40;
+        } else if (slug.direction == 1 && slug.x >= 61) {
+            slug.velocity = 0;
+        }
+
         slug.setVelocity(
             slug.velocity * slug.direction,
             slug.velocity * 0 // always 0
         );
+        console.log(slug.x + ", " + slug.y + ": ", slug.direction);
         // bus overlap
         scene.physics.add.overlap(scene.busses, slug, (bus, slug) => {
-            slug.body.enable = false;
             bus.hasPlayer = true;
             bus.setTintFill(0xffbf00);
             console.log("GOT ON BUS");

@@ -17,10 +17,12 @@ class Play extends Phaser.Scene {
             },
             fixedWidth: 0,
         };
-        this.keys = this.input.keyboard.createCursorKeys();
-        // this.keys.BKey = this.input.keyboard.addKey(
-        //     Phaser.Input.Keyboard.KeyCodes.B
-        // );
+
+        this.keys = {};
+        Object.values(Phaser.Input.Keyboard.KeyCodes).forEach((keyCode) => {
+            this.keys[keyCode] = this.input.keyboard.addKey(keyCode);
+        });
+
         this.input.on("pointerdown", (pointer) => {
             console.log("Mouse clicked at position: ", pointer.x, pointer.y);
         });
@@ -65,12 +67,6 @@ class Play extends Phaser.Scene {
 
         this.busses = this.add.group([this.bus1, this.bus2, this.bus3]);
 
-        // this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
-        //     slug.body.enable = false;
-        //     bus.hasPlayer = true;
-        //     bus.setTintFill(0xffbf00);
-        //     console.log("SLUG");
-        // });
     }
     update() {
         // make sure we step (ie update) the slug's state machine
