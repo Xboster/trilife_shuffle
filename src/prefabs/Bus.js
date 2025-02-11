@@ -52,15 +52,13 @@ class DriveState extends State {
         );
         // console.log("ENTERED DRIVE STATE");
         scene.eventEmitter.once("busBoarded", (bus) => {
-            // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
-            // console.log(bus.x + ", " + bus.y + ": ", bus.direction);
-
-            // if (bus.hasPlayer) {
-            //     this.stateMachine.transition("idle");
-            //     return;
-            // }
             bus.setTintFill(0xffbf00);
-            bus.wait = 250;
+            bus.wait = 300;
+        });
+
+        scene.eventEmitter.once("busExited", (bus) => {
+            bus.setTintFill(0xffffff);
+            bus.wait = 400;
         });
     }
     execute(scene, bus) {
@@ -88,7 +86,6 @@ class DriveState extends State {
             return;
         }
 
-
         // function movebus(bus) {
         scene.busses.getChildren().forEach((otherBus) => {
             if (otherBus.wait > 0 && bus != otherBus && bus.x == otherBus.x) {
@@ -97,14 +94,14 @@ class DriveState extends State {
                     bus.y > otherBus.y &&
                     bus.y < otherBus.y + 15
                 ) {
-                    bus.wait = 350;
+                    bus.wait = 400;
                 }
                 if (
                     bus.direction == 1 &&
                     bus.y > otherBus.y - 15 &&
                     bus.y < otherBus.y
                 ) {
-                    bus.wait = 350;
+                    bus.wait = 400;
                 }
             }
         });

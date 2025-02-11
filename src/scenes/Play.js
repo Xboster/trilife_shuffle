@@ -77,8 +77,6 @@ class Play extends Phaser.Scene {
         this.bus3.busFSM.step();
 
         this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
-            // bus.hasPlayer = true;
-            // bus.setTintFill(0xffbf00);
             this.eventEmitter.emit("busBoarded", bus);
             // console.log("GOT ON BUS");
             return;

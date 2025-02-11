@@ -45,6 +45,7 @@ class OnBus extends State {
             if (Phaser.Input.Keyboard.JustDown(key)) {
                 console.log("Pressed key to exit bus");
                 if (slug.bus != null) {
+                    scene.eventEmitter.emit("busExited", slug.bus);
                     this.stateMachine.transition("move");
                     return;
                 }
@@ -56,24 +57,8 @@ class OnBus extends State {
 class MoveState extends State {
     enter(scene, slug) {
         slug.setAlpha(1);
-        slug.anims.play(`move`, true);
         slug.setFlipX(slug.direction == -1 ? true : false);
-
-        // // getting off bus
-        // if (slug.onBus != null) {
-        //     let playerBus = scene.busses
-        //         .getChildren()
-        //         .find((bus) => bus.hasPlayer == true);
-        //     playerBus.hasPlayer = false;
-        //     playerBus.setTintFill(0xffffff);
-
-        //     console.log("GOT OFF BUS");
-        //     slug.body.enable = true;
-        // }
-        if (slug.bus) {
-            slug.bus.setTintFill(0xffffff);
-            slug.bus = null;
-        }
+        slug.bus = null;
 
         scene.eventEmitter.once("busBoarded", (bus) => {
             // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
@@ -108,6 +93,12 @@ class MoveState extends State {
             slug.velocity * slug.direction,
             slug.velocity * 0 // always 0
         );
+
+        if (slug.velocity > 0) {
+            slug.anims.play(`move`, true);
+        } else {
+            slug.anims.play(`move`, false);
+        }
         // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
     }
 }
