@@ -54,8 +54,16 @@ class Menu extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                game.config.height / 3,
+                game.config.height / 4,
                 "Trilife Shuffle",
+                menuConfig
+            )
+            .setOrigin(0.5);
+        this.add
+            .text(
+                game.config.width / 2,
+                game.config.height / 3,
+                "made by Leon Ng",
                 menuConfig
             )
             .setOrigin(0.5);
@@ -64,10 +72,19 @@ class Menu extends Phaser.Scene {
             .text(
                 game.config.width / 2,
                 (game.config.height * 2) / 3,
-                "Press any key \n to start",
+                "Press any key\nto play",
                 menuConfig
             )
             .setOrigin(0.5);
+        (menuConfig.color = "#050505"),
+            this.add
+                .text(
+                    game.config.width / 2,
+                    (game.config.height * 5) / 6,
+                    "Press d key for\ndebug mode",
+                    menuConfig
+                )
+                .setOrigin(0.5);
         // animations
         this.anims.create({
             key: "move",
