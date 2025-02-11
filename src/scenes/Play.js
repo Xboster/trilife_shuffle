@@ -42,7 +42,7 @@ class Play extends Phaser.Scene {
             },
             this
         );
-
+        this.physics.world.drawDebug = false;
         var graphics = this.add.graphics();
 
         graphics.setDefaultStyles({
@@ -117,7 +117,7 @@ class Play extends Phaser.Scene {
             Phaser.Math.Between(0, this.buildings.getLength() - 1)
         ].isActive = true;
 
-        this.timeLeft = 1;
+        this.timeLeft = 10;
         this.score = 0;
         this.multiplyer = 1;
         this.difficulty = 1;
