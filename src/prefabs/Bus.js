@@ -26,10 +26,6 @@ class ParkState extends State {
     enter(scene, bus) {
         bus.setVelocity(0);
         bus.setAlpha(1);
-        // bus.anims.stop();
-        // scene.time.delayedCall(400, () => {
-        //     this.stateMachine.transition("move");
-        // });
     }
     execute(scene, bus) {
         // console.log(bus.wait);
@@ -63,6 +59,7 @@ class DriveState extends State {
             //     this.stateMachine.transition("idle");
             //     return;
             // }
+            bus.setTintFill(0xffbf00);
             bus.wait = 250;
         });
     }
@@ -91,22 +88,23 @@ class DriveState extends State {
             return;
         }
 
+
         // function movebus(bus) {
         scene.busses.getChildren().forEach((otherBus) => {
             if (otherBus.wait > 0 && bus != otherBus && bus.x == otherBus.x) {
                 if (
                     bus.direction == -1 &&
                     bus.y > otherBus.y &&
-                    bus.y < otherBus.y + 20
+                    bus.y < otherBus.y + 15
                 ) {
-                    bus.wait = 150;
+                    bus.wait = 350;
                 }
                 if (
                     bus.direction == 1 &&
-                    bus.y > otherBus.y - 20 &&
+                    bus.y > otherBus.y - 15 &&
                     bus.y < otherBus.y
                 ) {
-                    bus.wait = 150;
+                    bus.wait = 350;
                 }
             }
         });
