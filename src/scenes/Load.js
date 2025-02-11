@@ -13,6 +13,19 @@ class Menu extends Phaser.Scene {
             frameWidth: 8,
             frameHeight: 8,
         });
+
+        this.load.spritesheet("UC", "UC.png", {
+            frameWidth: 15,
+            frameHeight: 9,
+        });
+        this.load.spritesheet("store", "store.png", {
+            frameWidth: 15,
+            frameHeight: 9,
+        });
+        this.load.spritesheet("downtown", "downtown.png", {
+            frameWidth: 15,
+            frameHeight: 9,
+        });
     }
     create() {
         // start text
@@ -51,7 +64,7 @@ class Menu extends Phaser.Scene {
         // animations
         this.anims.create({
             key: "move",
-            frameRate: 24,
+            frameRate: 16,
             repeat: -1,
             frames: this.anims.generateFrameNumbers("slug", {
                 start: 0,

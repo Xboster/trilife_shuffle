@@ -30,6 +30,25 @@ class ParkState extends State {
     execute(scene, bus) {
         // console.log(bus.wait);
         bus.wait -= scene.sys.game.loop.delta;
+        // stops bus if otherbus in front
+        scene.busses.getChildren().forEach((otherBus) => {
+            if (otherBus.wait > 0 && bus != otherBus && bus.x == otherBus.x) {
+                if (
+                    bus.direction == -1 &&
+                    bus.y > otherBus.y &&
+                    bus.y < otherBus.y + 15
+                ) {
+                    bus.wait = 400;
+                }
+                if (
+                    bus.direction == 1 &&
+                    bus.y > otherBus.y - 15 &&
+                    bus.y < otherBus.y
+                ) {
+                    bus.wait = 400;
+                }
+            }
+        });
         if (bus.wait <= 0) {
             this.stateMachine.transition("move");
             return;
@@ -51,17 +70,17 @@ class DriveState extends State {
             bus.velocity * moveDirection.y
         );
         // console.log("ENTERED DRIVE STATE");
+    }
+    execute(scene, bus) {
         scene.eventEmitter.once("busBoarded", (bus) => {
             bus.setTintFill(0xffbf00);
             bus.wait = 300;
         });
 
         scene.eventEmitter.once("busExited", (bus) => {
-            bus.setTintFill(0xffffff);
+            // bus.setTintFill(0xffffff);
             bus.wait = 400;
         });
-    }
-    execute(scene, bus) {
         // make bus wait
         if (bus.wait > 0) {
             this.stateMachine.transition("idle");
@@ -86,7 +105,7 @@ class DriveState extends State {
             return;
         }
 
-        // function movebus(bus) {
+        // stops bus if otherbus in front
         scene.busses.getChildren().forEach((otherBus) => {
             if (otherBus.wait > 0 && bus != otherBus && bus.x == otherBus.x) {
                 if (

@@ -59,15 +59,28 @@ class Play extends Phaser.Scene {
         graphics.fillRect(44, 0, 1, 100);
         graphics.fillRect(42, 0, 1, 100);
 
-        // add new Slug to scene (scene, x, y, key, direction)
-        this.slug = new Slug(this, 50, 40, "slug", 1);
-
         // add new Bus to scene (scene, x, y, key, direction)
         this.bus1 = new Bus(this, 65, 50, "bus", 1);
         this.bus2 = new Bus(this, 65, 70, "bus", 1);
         this.bus3 = new Bus(this, 65, 90, "bus", 1);
 
         this.busses = this.add.group([this.bus1, this.bus2, this.bus3]);
+
+        // add new Building to scene (scene, x, y, key)
+        this.building1 = new Building(this, 50, 20, "UC");
+        this.building2 = new Building(this, 50, 50, "store");
+        this.building3 = new Building(this, 50, 80, "downtown");
+
+        this.buildings = this.add.group([
+            this.building1,
+            this.building2,
+            this.building3,
+        ]);
+
+        this.score = 0;
+
+        // add new Slug to scene (scene, x, y, key, direction)
+        this.slug = new Slug(this, 50, 40, "slug", 1);
     }
     update(time, delta) {
         // make sure we step (ie update) the slug's state machine
@@ -76,10 +89,19 @@ class Play extends Phaser.Scene {
         this.bus2.busFSM.step();
         this.bus3.busFSM.step();
 
+        this.building1.buildingFSM.step();
+        this.building2.buildingFSM.step();
+        this.building3.buildingFSM.step();
+
         this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
             this.eventEmitter.emit("busBoarded", bus);
             // console.log("GOT ON BUS");
-            return;
+
+        });
+
+        this.physics.add.overlap(this.buildings, this.slug, (building, slug) => {
+            this.eventEmitter.emit("buildingTouched", building);
+
         });
     }
 }

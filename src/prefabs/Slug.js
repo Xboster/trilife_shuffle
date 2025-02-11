@@ -46,6 +46,7 @@ class OnBus extends State {
                 console.log("Pressed key to exit bus");
                 if (slug.bus != null) {
                     scene.eventEmitter.emit("busExited", slug.bus);
+                    slug.bus.setTintFill(0xffffff);
                     this.stateMachine.transition("move");
                     return;
                 }
@@ -58,7 +59,10 @@ class MoveState extends State {
     enter(scene, slug) {
         slug.setAlpha(1);
         slug.setFlipX(slug.direction == -1 ? true : false);
-        slug.bus = null;
+        if (slug.bus) {
+            // slug.bus.setTintFill(0xffffff);
+            slug.bus = null;
+        }
 
         scene.eventEmitter.once("busBoarded", (bus) => {
             // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
@@ -95,9 +99,9 @@ class MoveState extends State {
         );
 
         if (slug.velocity > 0) {
-            slug.anims.play(`move`, true);
+            slug.anims.play("move", true);
         } else {
-            slug.anims.play(`move`, false);
+            slug.anims.play("move", false);
         }
         // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
     }
