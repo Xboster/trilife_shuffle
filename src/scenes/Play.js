@@ -8,6 +8,13 @@ class Play extends Phaser.Scene {
     preload() {}
     create() {
         this.cameras.main.setZoom(1);
+
+        this.music = this.sound.add("backgroundMusic", {
+            loop: true,
+            rate: 1,
+        });
+        this.music.play();
+
         this.scale.setGameSize(100, 100);
         this.textConfig = {
             fontFamily: "Courier",
@@ -158,5 +165,9 @@ class Play extends Phaser.Scene {
         // difficulty goes up as game goes on
         this.difficulty += (delta / 1000) * 0.02;
         // console.log(this.difficulty);
+        this.music.rate = 0.9 + this.difficulty / 10;
+        console.log("New rate:", this.music.rate);
+
+        
     }
 }

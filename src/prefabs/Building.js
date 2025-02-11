@@ -57,6 +57,8 @@ class ActiveState extends State {
 
             building.isActive = false;
             building.setFrame(0);
+
+            scene.sound.play("pointsEffect");
         });
     }
     execute(scene, building) {

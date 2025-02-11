@@ -26,15 +26,21 @@ class Menu extends Phaser.Scene {
             frameWidth: 15,
             frameHeight: 9,
         });
+
+        this.load.audio("backgroundMusic", "song.wav");
+        this.load.audio("doorEffect", "door.wav");
+        this.load.audio("loseEffect", "lose.wav");
+        this.load.audio("pointsEffect", "points.wav");
+        this.load.audio("slugEffect", "slug.wav");
     }
     create() {
         // start text
         let menuConfig = {
             fontFamily: "Courier New",
-            fontSize: "10px",
+            fontSize: "16px",
             // backgroundColor: "#00FF00",
             color: "#FFFFFF",
-            align: "right",
+            align: "center",
             padding: {
                 top: 5,
                 bottom: 5,
@@ -47,7 +53,7 @@ class Menu extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                game.config.height / 2,
+                game.config.height / 3,
                 "Trilife Shuffle",
                 menuConfig
             )
@@ -56,8 +62,8 @@ class Menu extends Phaser.Scene {
         this.add
             .text(
                 game.config.width / 2,
-                (game.config.height / 4) * 3,
-                "Press any key to start",
+                (game.config.height * 2) / 3,
+                "Press any key \n to start",
                 menuConfig
             )
             .setOrigin(0.5);

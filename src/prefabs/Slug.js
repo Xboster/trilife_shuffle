@@ -47,6 +47,8 @@ class OnBus extends State {
                 console.log("Pressed key to exit bus");
                 if (slug.bus != null && slug.y > 5 && slug.y < 95) {
                     scene.eventEmitter.emit("busExited", slug.bus);
+                    scene.sound.play("doorEffect");
+
                     slug.bus.setTintFill(0xffffff);
                     this.stateMachine.transition("move");
                     return;
@@ -81,6 +83,8 @@ class MoveState extends State {
         Object.values(scene.input.keyboard.keys).forEach((key) => {
             if (Phaser.Input.Keyboard.JustDown(key)) {
                 slug.direction *= -1;
+                scene.sound.play("slugEffect");
+
                 // console.log(`Key pressed: ${key.name}`);
             }
         });
