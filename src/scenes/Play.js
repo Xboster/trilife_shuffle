@@ -7,6 +7,8 @@ class Play extends Phaser.Scene {
     init() {}
     preload() {}
     create() {
+        this.cameras.main.setZoom(1);
+        this.scale.setGameSize(100, 100);
         this.textConfig = {
             fontFamily: "Courier",
             fontSize: "10px",
@@ -113,6 +115,7 @@ class Play extends Phaser.Scene {
         this.timeLeft = 10;
         this.score = 0;
         this.multiplyer = 1;
+        this.difficulty = 1;
 
         this.eventEmitter.on("buildingTouched", (building) => {
             this.score += 100 * this.multiplyer;
@@ -122,8 +125,8 @@ class Play extends Phaser.Scene {
 
         this.timer = this.add
             .text(
-                game.config.width / 5,
-                game.config.height / 2,
+                game.config.width / 10,
+                game.config.height / 4,
                 this.timeLeft,
                 this.textConfig
             )
@@ -151,5 +154,9 @@ class Play extends Phaser.Scene {
         this.timeLeft -= delta / 1000;
         this.timer.setText(this.timeLeft.toFixed(1));
         this.scoreText.setText(this.score);
+
+        // difficulty goes up as game goes on
+        this.difficulty += (delta / 1000) * 0.02;
+        // console.log(this.difficulty);
     }
 }

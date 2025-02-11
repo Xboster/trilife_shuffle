@@ -1,5 +1,6 @@
 // Leon Ng
 // Trilife Shuffle
+// Hours spent:
 
 const config = {
     type: Phaser.AUTO,
@@ -9,8 +10,8 @@ const config = {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         zoom: 1,
-        width: 100,
-        height: 100,
+        width: 200,
+        height: 200,
     },
 
     physics: {

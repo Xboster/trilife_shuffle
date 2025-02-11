@@ -66,8 +66,8 @@ class DriveState extends State {
 
         moveDirection.normalize();
         bus.setVelocity(
-            bus.velocity * moveDirection.x,
-            bus.velocity * moveDirection.y
+            bus.velocity * moveDirection.x, // always 0
+            bus.velocity * moveDirection.y * scene.difficulty
         );
         // console.log("ENTERED DRIVE STATE");
         scene.eventEmitter.once("busBoarded", (bus) => {
