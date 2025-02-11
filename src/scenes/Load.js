@@ -34,6 +34,7 @@ class Menu extends Phaser.Scene {
         this.load.audio("slugEffect", "slug.wav");
     }
     create() {
+        this.scale.setGameSize(200, 200);
         // start text
         let menuConfig = {
             fontFamily: "Courier New",

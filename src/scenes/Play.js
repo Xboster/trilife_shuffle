@@ -7,8 +7,6 @@ class Play extends Phaser.Scene {
     init() {}
     preload() {}
     create() {
-        this.cameras.main.setZoom(1);
-
         this.music = this.sound.add("backgroundMusic", {
             loop: true,
             rate: 1,
@@ -119,10 +117,11 @@ class Play extends Phaser.Scene {
             Phaser.Math.Between(0, this.buildings.getLength() - 1)
         ].isActive = true;
 
-        this.timeLeft = 10;
+        this.timeLeft = 1;
         this.score = 0;
         this.multiplyer = 1;
         this.difficulty = 1;
+        this.gameover = false;
 
         this.eventEmitter.on("buildingTouched", (building) => {
             this.score += 100 * this.multiplyer;
@@ -144,30 +143,39 @@ class Play extends Phaser.Scene {
             .setOrigin(0);
     }
     update(time, delta) {
-        // make sure we step (ie update) the slug's state machine
-        this.slug.slugFSM.step();
+        if (!this.gameover) {
+            // make sure we step (ie update) the slug's state machine
+            this.slug.slugFSM.step();
 
-        // make sure we step (ie update) the bus' state machine
-        this.bus1.busFSM.step();
-        this.bus2.busFSM.step();
-        this.bus3.busFSM.step();
+            // make sure we step (ie update) the bus' state machine
+            this.bus1.busFSM.step();
+            this.bus2.busFSM.step();
+            this.bus3.busFSM.step();
 
-        // make sure we step (ie update) the buildings' state machine
-        this.building1.buildingFSM.step();
-        this.building2.buildingFSM.step();
-        this.building3.buildingFSM.step();
+            // make sure we step (ie update) the buildings' state machine
+            this.building1.buildingFSM.step();
+            this.building2.buildingFSM.step();
+            this.building3.buildingFSM.step();
 
-        // console.log(this.timeLeft);
-        this.timeLeft -= delta / 1000;
-        this.timer.setText(this.timeLeft.toFixed(1));
-        this.scoreText.setText(this.score);
+            // console.log(this.timeLeft);
+            this.timeLeft -= delta / 1000;
+            this.timer.setText(this.timeLeft.toFixed(1));
+            this.scoreText.setText(this.score);
 
-        // difficulty goes up as game goes on
-        this.difficulty += (delta / 1000) * 0.02;
-        // console.log(this.difficulty);
-        this.music.rate = 0.9 + this.difficulty / 10;
-        console.log("New rate:", this.music.rate);
+            // difficulty goes up as game goes on
+            this.difficulty += (delta / 1000) * 0.02;
+            // console.log(this.difficulty);
+            this.music.rate = 0.9 + this.difficulty / 10;
+        }
 
-        
+        if (!this.gameover && this.timeLeft <= 0) {
+            this.gameover = true;
+            this.music.stop();
+            this.sound.play("loseEffect");
+            this.time.delayedCall(3000, () => {
+                this.scene.start("LoadScene");
+                this.cameras.main.setZoom(0.5);
+            });
+        }
     }
 }
