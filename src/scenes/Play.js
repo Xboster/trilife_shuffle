@@ -95,27 +95,20 @@ class Play extends Phaser.Scene {
             }
         );
 
-        // this.input.keyboard.on(
-        //     "keydown-Q",
-        //     function () {
-        //         this.building1.isActive = true;
-        //     },
-        //     this
-        // );
-        // this.input.keyboard.on(
-        //     "keydown-W",
-        //     function () {
-        //         this.building2.isActive = true;
-        //     },
-        //     this
-        // );
-        // this.input.keyboard.on(
-        //     "keydown-E",
-        //     function () {
-        //         this.building3.isActive = true;
-        //     },
-        //     this
-        // );
+        // this.allInactive = true;
+
+        // this.buildings.getChildren().forEach((building) => {
+        //     if (building.isActive == true) {
+        //         this.allInactive = false;
+        //     }
+        // });
+
+        // if(this.allInactive){
+
+        // set one random building to active
+        this.buildings.getChildren()[
+            Phaser.Math.Between(0, this.buildings.getLength() - 1)
+        ].isActive = true;
 
         this.timeLeft = 10;
         this.score = 0;
@@ -124,6 +117,7 @@ class Play extends Phaser.Scene {
         this.eventEmitter.on("buildingTouched", (building) => {
             this.score += 100 * this.multiplyer;
             this.multiplyer += 1;
+            this.timeLeft += 2;
         });
 
         this.timer = this.add

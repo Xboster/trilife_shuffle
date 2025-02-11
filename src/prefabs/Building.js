@@ -43,13 +43,23 @@ class IdleState extends State {
 class ActiveState extends State {
     enter(scene, building) {
         building.anims.play("active");
-    }
-    execute(scene, building) {
         scene.eventEmitter.once("buildingTouched", (building) => {
             // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
+            // set another building to active
+            let otherBuilding;
+            do {
+                otherBuilding =
+                    scene.buildings.getChildren()[
+                        Phaser.Math.Between(0, scene.buildings.getLength() - 1)
+                    ];
+            } while (otherBuilding == building);
+            otherBuilding.isActive = true;
+
             building.isActive = false;
             building.setFrame(0);
         });
+    }
+    execute(scene, building) {
         if (!building.isActive) {
             this.stateMachine.transition("idle");
             return;
