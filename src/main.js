@@ -1,13 +1,6 @@
 // Leon Ng
 // Trilife Shuffle
-// const config = {
-//     type: Phaser.AUTO,
-//     width: 480,
-//     height: 480,
-//     scene: [Menu, Play],
-// };
 
-// const game = new Phaser.Game(config);
 const config = {
     type: Phaser.AUTO,
     pixelArt: true,
@@ -15,7 +8,7 @@ const config = {
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
-        zoom: 8,
+        zoom: 1,
         width: 100,
         height: 100,
     },

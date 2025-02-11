@@ -32,8 +32,8 @@ class Menu extends Phaser.Scene {
         let menuConfig = {
             fontFamily: "Courier",
             fontSize: "8px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
+            backgroundColor: "#00FF00",
+            color: "#000",
             align: "right",
             padding: {
                 top: 5,
@@ -42,8 +42,8 @@ class Menu extends Phaser.Scene {
             fixedWidth: 0,
         };
 
-        menuConfig.backgroundColor = "#00FF00";
-        menuConfig.color = "#000";
+        // menuConfig.backgroundColor = "#00FF00";
+        // menuConfig.color = "#000";
         this.add
             .text(
                 game.config.width / 2,

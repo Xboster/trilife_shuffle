@@ -7,20 +7,16 @@ class Play extends Phaser.Scene {
     init() {}
     preload() {}
     create() {
-        let menuConfig = {
+        this.textConfig = {
             fontFamily: "Courier",
-            fontSize: "8px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
-            align: "right",
-            padding: {
-                top: 5,
-                bottom: 5,
-            },
+            fontSize: "10px",
+            color: "#FFFFFF",
+            align: "left",
             fixedWidth: 0,
         };
 
         this.keys = {};
+        // all keys
         Object.values(Phaser.Input.Keyboard.KeyCodes).forEach((keyCode) => {
             this.keys[keyCode] = this.input.keyboard.addKey(keyCode);
         });
@@ -81,27 +77,85 @@ class Play extends Phaser.Scene {
 
         // add new Slug to scene (scene, x, y, key, direction)
         this.slug = new Slug(this, 50, 40, "slug", 1);
-    }
-    update(time, delta) {
-        // make sure we step (ie update) the slug's state machine
-        this.slug.slugFSM.step();
-        this.bus1.busFSM.step();
-        this.bus2.busFSM.step();
-        this.bus3.busFSM.step();
-
-        this.building1.buildingFSM.step();
-        this.building2.buildingFSM.step();
-        this.building3.buildingFSM.step();
+        // this.slug = new Slug(this, 50, 14.5, "slug", 0);
 
         this.physics.add.overlap(this.busses, this.slug, (bus, slug) => {
             this.eventEmitter.emit("busBoarded", bus);
             // console.log("GOT ON BUS");
-
         });
 
-        this.physics.add.overlap(this.buildings, this.slug, (building, slug) => {
-            this.eventEmitter.emit("buildingTouched", building);
+        this.physics.add.overlap(
+            this.buildings,
+            this.slug,
+            (building, slug) => {
+                if (slug.bus == null && building.isActive) {
+                    this.eventEmitter.emit("buildingTouched", building);
+                    // console.log("TOUCHED at" + slug.y);
+                }
+            }
+        );
 
+        // this.input.keyboard.on(
+        //     "keydown-Q",
+        //     function () {
+        //         this.building1.isActive = true;
+        //     },
+        //     this
+        // );
+        // this.input.keyboard.on(
+        //     "keydown-W",
+        //     function () {
+        //         this.building2.isActive = true;
+        //     },
+        //     this
+        // );
+        // this.input.keyboard.on(
+        //     "keydown-E",
+        //     function () {
+        //         this.building3.isActive = true;
+        //     },
+        //     this
+        // );
+
+        this.timeLeft = 10;
+        this.score = 0;
+        this.multiplyer = 1;
+
+        this.eventEmitter.on("buildingTouched", (building) => {
+            this.score += 100 * this.multiplyer;
+            this.multiplyer += 1;
         });
+
+        this.timer = this.add
+            .text(
+                game.config.width / 5,
+                game.config.height / 2,
+                this.timeLeft,
+                this.textConfig
+            )
+            .setOrigin(0.5);
+
+        this.scoreText = this.add
+            .text(0, 0, this.score, this.textConfig)
+            .setOrigin(0);
+    }
+    update(time, delta) {
+        // make sure we step (ie update) the slug's state machine
+        this.slug.slugFSM.step();
+
+        // make sure we step (ie update) the bus' state machine
+        this.bus1.busFSM.step();
+        this.bus2.busFSM.step();
+        this.bus3.busFSM.step();
+
+        // make sure we step (ie update) the buildings' state machine
+        this.building1.buildingFSM.step();
+        this.building2.buildingFSM.step();
+        this.building3.buildingFSM.step();
+
+        // console.log(this.timeLeft);
+        this.timeLeft -= delta / 1000;
+        this.timer.setText(this.timeLeft.toFixed(1));
+        this.scoreText.setText(this.score);
     }
 }

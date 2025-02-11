@@ -20,7 +20,7 @@ class Building extends Phaser.Physics.Arcade.Sprite {
 
         // initialize state machine managing building (initial state, possible states, state args[])
         this.buildingFSM = new StateMachine(
-            "active",
+            "idle",
             {
                 idle: new IdleState(),
                 active: new ActiveState(),
@@ -32,14 +32,12 @@ class Building extends Phaser.Physics.Arcade.Sprite {
 class IdleState extends State {
     enter(scene, building) {
         building.anims.stop();
-        // building.anims.play("active", false);
     }
     execute(scene, building) {
-        // building.anims.play("active", true);
-        // if (isActive) {
-        //     this.stateMachine.transition("active");
-        //     return;
-        // }
+        if (building.isActive) {
+            this.stateMachine.transition("active");
+            return;
+        }
     }
 }
 class ActiveState extends State {
@@ -47,6 +45,11 @@ class ActiveState extends State {
         building.anims.play("active");
     }
     execute(scene, building) {
+        scene.eventEmitter.once("buildingTouched", (building) => {
+            // console.log(slug.x + ", " + slug.y + ": ", slug.direction);
+            building.isActive = false;
+            building.setFrame(0);
+        });
         if (!building.isActive) {
             this.stateMachine.transition("idle");
             return;

@@ -70,17 +70,19 @@ class DriveState extends State {
             bus.velocity * moveDirection.y
         );
         // console.log("ENTERED DRIVE STATE");
-    }
-    execute(scene, bus) {
         scene.eventEmitter.once("busBoarded", (bus) => {
             bus.setTintFill(0xffbf00);
             bus.wait = 300;
+            return;
         });
 
         scene.eventEmitter.once("busExited", (bus) => {
             // bus.setTintFill(0xffffff);
             bus.wait = 400;
+            return;
         });
+    }
+    execute(scene, bus) {
         // make bus wait
         if (bus.wait > 0) {
             this.stateMachine.transition("idle");
